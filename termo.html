@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo Termo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #121213;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      gap: 5px;
+    }
+
+    .tile {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #3a3a3c;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+
+    .correct { background-color: #538d4e; color: white; }
+    .present { background-color: #b59f3b; color: white; }
+    .absent { background-color: #3a3a3c; color: white; }
+
+    input {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      width: 200px;
+      padding: 5px;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo Termo</h1>
+  <div class="board" id="board"></div>
+<input type="text" id="guess" maxlength="5" placeholder="Digite a palavra" oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ]/g, '').slice(0, 5)" autofocus />
+  <button onclick="submitGuess()">Enviar</button>
+  <button onclick="newGame()">Nova Palavra</button>
+
+  <script>
+    let palavraSecreta = "";
+    let tentativa = 0;
+
+    const board = document.getElementById("board");
+
+    function criarTabuleiro() {
+      board.innerHTML = "";
+      for (let i = 0; i < 6; i++) {
+        const row = document.createElement("div");
+        row.className = "row";
+        for (let j = 0; j < 5; j++) {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          row.appendChild(tile);
+        }
+        board.appendChild(row);
+      }
+    }
+
+async function newGame() {
+  tentativa = 0;
+  criarTabuleiro();
+  document.getElementById("guess").value = "";
+
+  try {
+    const response = await fetch('./assets/palavras.txt');
+    const text = await response.text();
+
+    const palavras = text
+      .split('\n')
+      .map(p => p.trim().toLowerCase())
+      .filter(p => p.length === 5 && /^[a-záéíóúâêôãõç]+$/.test(p));
+
+    if (palavras.length === 0) throw new Error("Nenhuma palavra válida encontrada.");
+
+    palavraSecreta = palavras[Math.floor(Math.random() * palavras.length)];
+    console.log("Palavra secreta:", palavraSecreta); // Para testes
+  } catch (error) {
+    alert("Erro ao carregar palavras. Verifique sua conexão.");
+    console.error(error);
+  }
+}
+
+
+
+    function submitGuess() {
+      const input = document.getElementById("guess");
+      const guess = input.value.toLowerCase();
+
+      if (guess.length !== 5 || tentativa >= 6) return;
+
+      const row = board.children[tentativa];
+      const secretArray = palavraSecreta.split("");
+      const guessArray = guess.split("");
+
+      // Marca inicial para todas ausentes
+      const result = Array(5).fill("absent");
+
+      // Primeiro: verifica letras corretas na posição
+      for (let i = 0; i < 5; i++) {
+        if (guessArray[i] === secretArray[i]) {
+          result[i] = "correct";
+          secretArray[i] = null; // remove letra para evitar duplas
+        }
+      }
+
+      // Segundo: verifica letras presentes mas fora de posição
+      for (let i = 0; i < 5; i++) {
+        if (result[i] === "correct") continue;
+        const index = secretArray.indexOf(guessArray[i]);
+        if (index !== -1) {
+          result[i] = "present";
+          secretArray[index] = null;
+        }
+      }
+
+      // Preenche a linha com as cores
+      for (let i = 0; i < 5; i++) {
+        const tile = row.children[i];
+        tile.textContent = guessArray[i];
+        tile.classList.add(result[i]);
+      }
+
+      tentativa++;
+      input.value = "";
+
+      if (guess === palavraSecreta) {
+        setTimeout(() => alert("Parabéns! Você acertou!"), 100);
+      } else if (tentativa === 6) {
+        setTimeout(() => alert("Fim de jogo! A palavra era: " + palavraSecreta), 100);
+      }
+    }
+
+    newGame();
+  </script>
+</body>
+</html>
