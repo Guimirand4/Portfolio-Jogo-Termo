@@ -3,61 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
   <title>Jogo Termo</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #121213;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .board {
-      display: grid;
-      grid-template-rows: repeat(6, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: repeat(5, 60px);
-      gap: 5px;
-    }
-
-    .tile {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 2px solid #3a3a3c;
-      font-size: 2rem;
-      text-transform: uppercase;
-    }
-
-    .correct { background-color: #538d4e; color: white; }
-    .present { background-color: #b59f3b; color: white; }
-    .absent { background-color: #3a3a3c; color: white; }
-
-    input {
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      width: 200px;
-      padding: 5px;
-      text-align: center;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
   <h1>Jogo Termo</h1>
