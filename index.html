@@ -11,7 +11,7 @@
   <div class="board" id="board"></div>
 <input type="text" id="guess" maxlength="5" placeholder="Digite a palavra" oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ]/g, '').slice(0, 5)" autofocus />
   <button onclick="submitGuess()">Enviar</button>
-  <button onclick="newGame()">Nova Palavra</button>
+  <button id="newGameBtn" onclick="newGame()">Nova Palavra</button>
 
   <script>
     let palavraSecreta = "";
@@ -37,6 +37,7 @@ async function newGame() {
   tentativa = 0;
   criarTabuleiro();
   document.getElementById("guess").value = "";
+  document.getElementById("newGameBtn").style.display = "none";
 
   try {
     const response = await fetch('./assets/palavras.txt');
@@ -101,13 +102,20 @@ async function newGame() {
       input.value = "";
 
       if (guess === palavraSecreta) {
-        setTimeout(() => alert("Parabéns! Você acertou!"), 100);
+          setTimeout(() => {
+    alert("Parabéns! Você acertou!");
+    document.getElementById("newGameBtn").style.display = "inline-block";
+  }, 100);
       } else if (tentativa === 6) {
-        setTimeout(() => alert("Fim de jogo! A palavra era: " + palavraSecreta), 100);
-      }
+      setTimeout(() => {
+    alert("Fim de jogo! A palavra era: " + palavraSecreta);
+    document.getElementById("newGameBtn").style.display = "inline-block";
+  }, 100);
     }
+  }
 
     newGame();
+
   </script>
 </body>
 </html>
