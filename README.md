@@ -1,17 +1,21 @@
-🟩 Jogo Termo — Clone em HTML, CSS e JavaScript
-Este projeto é uma recriação do jogo Termo (https://term.ooo), feito com HTML, CSS e JavaScript puro. O objetivo do jogo é adivinhar uma palavra secreta de 5 letras em até 6 tentativas, com feedback visual a cada palpite:
+🟩 Termo Game — Clone in HTML, CSS, and JavaScript
 
-🟩 Verde: letra correta na posição correta
+This project is a recreation of the game Termo, built using pure HTML, CSS, and JavaScript.
 
-🟨 Amarelo: letra presente, mas na posição errada
+The goal of the game is to guess a secret 5-letter word in up to 6 attempts, with visual feedback after each guess:
 
-⬛ Cinza: letra ausente
+🟩 Green: correct letter in the correct position
 
-🔁 Funcionalidades
-Palavras aleatórias carregadas de um dicionário externo (palavras.txt)
+🟨 Yellow: letter is present but in the wrong position
 
-Verificação automática de cada tentativa
+⬛ Gray: letter not in the word
 
-Botão para iniciar um novo jogo
+🔁 Features
 
-Interface responsiva e minimalista
+🎲 Random words loaded from an external dictionary (palavras.txt)
+
+✅ Automatic validation after each guess
+
+🔄 Button to start a new game
+
+📱 Responsive and minimalist interface
